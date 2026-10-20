@@ -1,6 +1,11 @@
 requests>=2.0.0
 pandas>=1.0.0
 numpy>=1.18.0
+<<<<<<< HEAD
 plotly>=4.0.0
 streamlit>=1.0.0
 reportlab>=4.0.0
+=======
+plotly<6.0.0
+streamlit>=1.0.0
+>>>>>>> d82ac9435bfac7bcbb4d015335b161e62cc58d26
