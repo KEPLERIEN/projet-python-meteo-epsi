@@ -15,7 +15,7 @@ import streamlit as st
 # Configure logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-CACHE_DB = "data_cache.db"
+CACHE_DB = "data/data_cache.db"
 CACHE_TTL_MINUTES = 30
 DEFAULT_CITIES = {
     "Paris": {"lat": 48.8566, "lon": 2.3522},
