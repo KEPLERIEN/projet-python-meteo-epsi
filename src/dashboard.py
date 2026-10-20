@@ -250,6 +250,7 @@ def render_dashboard():
         }])
         fig_map = px.scatter_mapbox(
             map_df, lat="lat", lon="lon", hover_name="city", hover_data=["aqi"],
+            color_discrete_sequence=["fuchsia"], zoom=9, height=800
        
         )
         fig_map.update_layout(mapbox_style="open-street-map")
