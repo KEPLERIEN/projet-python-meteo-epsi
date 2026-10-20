@@ -121,6 +121,7 @@ class WeatherAPIClient:
         return {
             "weather": {
                 "current_weather": {
+                    "time": now.replace(minute=0, second=0, microsecond=0).isoformat(),
                     "temperature": round(np.random.uniform(15, 30), 1),
                     "windspeed": round(np.random.uniform(5, 25), 1),
                     "winddirection": int(np.random.uniform(0, 360))

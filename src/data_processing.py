@@ -59,3 +59,25 @@ class DataProcessor:
         start_time = current_time - pd.Timedelta(hours=24)
         mask = timestamps.between(start_time, current_time, inclusive="both")
         return df.loc[mask].copy()
+
+    @staticmethod
+    def select_current_observation(
+        df: pd.DataFrame,
+        observation_time: Optional[str],
+    ) -> pd.DataFrame:
+        """Select the latest hourly row at or before the API's current time."""
+        if df.empty:
+            return df.copy()
+
+        if not observation_time:
+            return df.iloc[[-1]].copy()
+
+        reference_time = pd.to_datetime(observation_time, errors="coerce")
+        if pd.isna(reference_time):
+            return df.iloc[[-1]].copy()
+
+        timestamps = pd.to_datetime(df["datetime"], errors="coerce")
+        current_rows = df.loc[timestamps <= reference_time]
+        if current_rows.empty:
+            return df.iloc[[timestamps.sub(reference_time).abs().argmin()]].copy()
+        return current_rows.iloc[[-1]].copy()

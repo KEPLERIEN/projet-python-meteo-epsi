@@ -153,12 +153,27 @@ def render_dashboard():
 
     # Add calculated metrics
     df["health_score"] = DataProcessor.calculate_custom_health_index(df)
-    latest = df.iloc[-1]
-    aqi_values = pd.to_numeric(df["us_aqi"], errors="coerce").dropna()
+    current_weather = raw_data.get("weather", {}).get("current_weather", {})
+    current_data = DataProcessor.select_current_observation(
+        df,
+        current_weather.get("time"),
+    )
+    latest = current_data.iloc[-1].copy()
+    current_temperature = pd.to_numeric(
+        pd.Series([current_weather.get("temperature")]),
+        errors="coerce",
+    ).iloc[0]
+    if pd.notna(current_temperature):
+        latest["temperature_2m"] = current_temperature
+        latest["health_score"] = DataProcessor.calculate_custom_health_index(
+            pd.DataFrame([latest])
+        ).iloc[0]
+
+    aqi_values = pd.to_numeric(current_data["us_aqi"], errors="coerce").dropna()
     latest_aqi = aqi_values.iloc[-1] if not aqi_values.empty else None
 
     # Alert Box Section
-    alerts = detect_alerts(df)
+    alerts = detect_alerts(pd.DataFrame([latest]))
     if alerts:
         for alert in alerts:
             if alert["level"] == "danger":
