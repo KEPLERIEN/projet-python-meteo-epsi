@@ -21,8 +21,8 @@ DEFAULT_CITIES = {
     "Paris": {"lat": 48.8566, "lon": 2.3522},
     "Lyon": {"lat": 45.7640, "lon": 4.8357},
     "Marseille": {"lat": 43.2965, "lon": 5.3698},
-    "London": {"lat": 51.5074, "lon": -0.1278},
-    "Madrid": {"lat": 40.4168, "lon": -3.7038}
+    "Rennes": {"lat": 48.1113, "lon": -1.6800},
+    "Grenoble": {"lat": 45.1885, "lon": 5.7245}
 }
 
 # Thresholds for alerts (WHO Guidelines)
