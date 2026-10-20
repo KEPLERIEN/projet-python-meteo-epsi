@@ -221,7 +221,6 @@ def render_dashboard():
 
     with tab3:
         st.subheader("Localisation de la station de suivi")
-       # marker_color = st.color_picker("Choisir la couleur du marqueur", "#ff00ff")
         map_df = pd.DataFrame([{
             "lat": city_info["lat"],
             "lon": city_info["lon"],
@@ -230,7 +229,7 @@ def render_dashboard():
         }])
         fig_map = px.scatter_mapbox(
             map_df, lat="lat", lon="lon", hover_name="city", hover_data=["aqi"],
-        #    color_discrete_sequence=["fuchsia"], zoom=9, height=400
+       
         )
         fig_map.update_layout(mapbox_style="open-street-map")
         st.plotly_chart(fig_map, use_container_width=True)
