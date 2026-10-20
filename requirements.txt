@@ -3,3 +3,4 @@ pandas>=1.0.0
 numpy>=1.18.0
 plotly>=4.0.0
 streamlit>=1.0.0
+reportlab>=4.0.0
