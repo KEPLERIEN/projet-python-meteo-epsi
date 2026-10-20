@@ -1,0 +1,10 @@
+
+services:
+  dashboard-meteo:
+    build: .
+    container_name: dashboard_meteo
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
