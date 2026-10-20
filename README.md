@@ -84,7 +84,11 @@ projet-python-meteo-epsi/
 ├── tests/
 │   ├── test_api.py               # Tests du client API
 │   └── test_processing.py        # Tests du traitement & des alertes
+├── .dockerignore
+├── .gitignore
 ├── dashboard_meteo_qualite_air_boilerplate.py   # Fichier sujet d'origine
+├── Dockerfile
+├── Docker-compose.yml
 ├── requirements.txt              # Dépendances du projet
 ├── LICENSE
 └── README.md
