@@ -129,7 +129,7 @@ Dépendances (voir [`requirements.txt`](requirements.txt)) : `requests`, `pandas
 
 ```bash
 # 1. Cloner le dépôt
-git clone https://github.com/<votre-compte>/projet-python-meteo-epsi.git
+git clone https://github.com/KEPLERIEN/projet-python-meteo-epsi.git
 cd projet-python-meteo-epsi
 
 # 2. (Recommandé) Créer un environnement virtuel
