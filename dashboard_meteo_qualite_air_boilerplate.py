@@ -279,6 +279,8 @@ def render_dashboard():
     # Add calculated metrics
     df["health_score"] = DataProcessor.calculate_custom_health_index(df)
     latest = df.iloc[-1]
+    aqi_values = pd.to_numeric(df["us_aqi"], errors="coerce").dropna()
+    latest_aqi = aqi_values.iloc[-1] if not aqi_values.empty else None
 
     # Alert Box Section
     alerts = DataProcessor.detect_alerts(df)
@@ -297,7 +299,8 @@ def render_dashboard():
     
     col1.metric("Température", f"{latest['temperature_2m']:.1f} °C")
     col2.metric("Humidité", f"{latest['relativehumidity_2m']:.0f} %")
-    col3.metric("Indice AQI (US)", f"{int(latest['us_aqi'])}")
+    aqi_display = f"{latest_aqi:.0f}" if latest_aqi is not None else "Indisponible"
+    col3.metric("Indice AQI (US)", aqi_display)
     col4.metric("PM 2.5", f"{latest['pm2_5']:.1f} µg/m³")
     col5.metric("Score Confort (0-100)", f"{latest['health_score']:.1f}")
 
@@ -329,7 +332,7 @@ def render_dashboard():
             "lat": city_info["lat"],
             "lon": city_info["lon"],
             "city": selected_city,
-            "aqi": latest["us_aqi"]
+            "aqi": latest_aqi
         }])
         fig_map = px.scatter_mapbox(
             map_df, lat="lat", lon="lon", hover_name="city", hover_data=["aqi"],
