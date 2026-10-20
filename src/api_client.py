@@ -73,7 +73,7 @@ class WeatherAPIClient:
         """
         Fetches combined weather and air quality data from Open-Meteo or local mock generator.
         """
-        cache_key = f"data_{lat}_{lon}"
+        cache_key = f"data_{lat}_{lon}_past1_local"
 
         if mock_mode:
             return self._generate_mock_data(lat, lon)
@@ -84,10 +84,12 @@ class WeatherAPIClient:
 
         weather_url = (
             f"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}"
-            f"&current_weather=true&hourly=temperature_2m,relativehumidity_2m,surface_pressure,windspeed_10m"
+            f"&current_weather=true&past_days=1&timezone=auto"
+            f"&hourly=temperature_2m,relativehumidity_2m,surface_pressure,windspeed_10m"
         )
         air_quality_url = (
             f"https://air-quality-api.open-meteo.com/v1/air-quality?latitude={lat}&longitude={lon}"
+            f"&past_days=1&timezone=auto"
             f"&hourly=pm10,pm2_5,nitrogen_dioxide,ozone,sulphur_dioxide,carbon_monoxide,us_aqi"
         )
 

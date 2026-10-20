@@ -212,12 +212,18 @@ def render_dashboard():
 
     with tab2:
         st.subheader("Concentration des Polluants Clés (µg/m³)")
-        fig_air = px.bar(
-            df.tail(24), x="datetime", y=["pm2_5", "pm10", "nitrogen_dioxide"],
-            barmode="group",
-            title="Exposition aux polluants sur les 24 dernières heures"
-        )
-        st.plotly_chart(fig_air, use_container_width=True)
+        last_24_hours = DataProcessor.filter_last_24_hours(df)
+        if last_24_hours.empty:
+            st.info("Aucune donnée mesurée disponible pour les 24 dernières heures.")
+        else:
+            fig_air = px.bar(
+                last_24_hours,
+                x="datetime",
+                y=["pm2_5", "pm10", "nitrogen_dioxide"],
+                barmode="group",
+                title="Exposition aux polluants sur les 24 dernières heures",
+            )
+            st.plotly_chart(fig_air, use_container_width=True)
 
     with tab3:
         st.subheader("Localisation de la station de suivi")

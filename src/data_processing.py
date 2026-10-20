@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 import pandas as pd
 import numpy as np
@@ -44,3 +44,18 @@ class DataProcessor:
 
         score = 100 - (temp_penalty + humidity_penalty + pollution_penalty)
         return score.clip(0, 100).round(1)
+
+    @staticmethod
+    def filter_last_24_hours(
+        df: pd.DataFrame,
+        now: Optional[pd.Timestamp] = None,
+    ) -> pd.DataFrame:
+        """Return only rows from the previous 24 hours, excluding forecast data."""
+        if df.empty:
+            return df.copy()
+
+        current_time = pd.Timestamp.now() if now is None else pd.Timestamp(now)
+        timestamps = pd.to_datetime(df["datetime"], errors="coerce")
+        start_time = current_time - pd.Timedelta(hours=24)
+        mask = timestamps.between(start_time, current_time, inclusive="both")
+        return df.loc[mask].copy()

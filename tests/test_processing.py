@@ -34,6 +34,25 @@ class TestDashboardModules(unittest.TestCase):
         alerts = detect_alerts(self.mock_df)
         self.assertTrue(len(alerts) > 0)
 
+    def test_filter_last_24_hours_excludes_old_and_future_rows(self):
+        now = pd.Timestamp("2026-10-20 12:30:00")
+        df = pd.DataFrame({
+            "datetime": pd.to_datetime([
+                "2026-10-19 12:00:00",
+                "2026-10-19 13:00:00",
+                "2026-10-20 12:00:00",
+                "2026-10-20 13:00:00",
+            ]),
+            "pm2_5": [1.0, 2.0, 3.0, 4.0],
+        })
+
+        result = DataProcessor.filter_last_24_hours(df, now=now)
+
+        self.assertEqual(
+            result["datetime"].tolist(),
+            [pd.Timestamp("2026-10-19 13:00:00"), pd.Timestamp("2026-10-20 12:00:00")],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
