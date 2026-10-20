@@ -1,7 +1,8 @@
+
 services:
-  dashboard:
+  dashboard-meteo:
     build: .
-    container_name: dashboard-meteo
+    container_name: dashboard_meteo
     ports:
       - "8501:8501"
     volumes:

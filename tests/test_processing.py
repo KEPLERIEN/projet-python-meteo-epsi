@@ -34,6 +34,44 @@ class TestDashboardModules(unittest.TestCase):
         alerts = detect_alerts(self.mock_df)
         self.assertTrue(len(alerts) > 0)
 
+    def test_filter_last_24_hours_excludes_old_and_future_rows(self):
+        now = pd.Timestamp("2026-10-20 12:30:00")
+        df = pd.DataFrame({
+            "datetime": pd.to_datetime([
+                "2026-10-19 12:00:00",
+                "2026-10-19 13:00:00",
+                "2026-10-20 12:00:00",
+                "2026-10-20 13:00:00",
+            ]),
+            "pm2_5": [1.0, 2.0, 3.0, 4.0],
+        })
+
+        result = DataProcessor.filter_last_24_hours(df, now=now)
+
+        self.assertEqual(
+            result["datetime"].tolist(),
+            [pd.Timestamp("2026-10-19 13:00:00"), pd.Timestamp("2026-10-20 12:00:00")],
+        )
+
+    def test_select_current_observation_excludes_forecast_rows(self):
+        df = pd.DataFrame({
+            "datetime": pd.to_datetime([
+                "2026-10-20 13:00:00",
+                "2026-10-20 14:00:00",
+                "2026-10-20 15:00:00",
+                "2026-10-20 16:00:00",
+            ]),
+            "temperature_2m": [10.0, 12.0, 14.0, 16.0],
+        })
+
+        result = DataProcessor.select_current_observation(
+            df,
+            "2026-10-20T15:08",
+        )
+
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result.iloc[0]["temperature_2m"], 14.0)
+
 
 if __name__ == "__main__":
     unittest.main()

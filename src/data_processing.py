@@ -1,4 +1,4 @@
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 
 import pandas as pd
 import numpy as np
@@ -44,3 +44,40 @@ class DataProcessor:
 
         score = 100 - (temp_penalty + humidity_penalty + pollution_penalty)
         return score.clip(0, 100).round(1)
+
+    @staticmethod
+    def filter_last_24_hours(
+        df: pd.DataFrame,
+        now: Optional[pd.Timestamp] = None,
+    ) -> pd.DataFrame:
+        """Return only rows from the previous 24 hours, excluding forecast data."""
+        if df.empty:
+            return df.copy()
+
+        current_time = pd.Timestamp.now() if now is None else pd.Timestamp(now)
+        timestamps = pd.to_datetime(df["datetime"], errors="coerce")
+        start_time = current_time - pd.Timedelta(hours=24)
+        mask = timestamps.between(start_time, current_time, inclusive="both")
+        return df.loc[mask].copy()
+
+    @staticmethod
+    def select_current_observation(
+        df: pd.DataFrame,
+        observation_time: Optional[str],
+    ) -> pd.DataFrame:
+        """Select the latest hourly row at or before the API's current time."""
+        if df.empty:
+            return df.copy()
+
+        if not observation_time:
+            return df.iloc[[-1]].copy()
+
+        reference_time = pd.to_datetime(observation_time, errors="coerce")
+        if pd.isna(reference_time):
+            return df.iloc[[-1]].copy()
+
+        timestamps = pd.to_datetime(df["datetime"], errors="coerce")
+        current_rows = df.loc[timestamps <= reference_time]
+        if current_rows.empty:
+            return df.iloc[[timestamps.sub(reference_time).abs().argmin()]].copy()
+        return current_rows.iloc[[-1]].copy()

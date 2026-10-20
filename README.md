@@ -65,7 +65,6 @@ le traitement métier et la couche d'affichage sont strictement séparés.
 | Fonctionnalité | Statut |
 | --- | :---: |
 | Mode Déconnecté / Simulation (données mockées en cas de coupure réseau) | Oui |
-| Prédictions par Machine Learning (H+24) | À venir |
 | Export de rapports (PDF / CSV) | À venir |
 | Conteneurisation Docker | À venir |
 
