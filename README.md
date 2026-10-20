@@ -10,7 +10,7 @@
 > Application Python de **surveillance météo et de la qualité de l'air en temps réel**, avec dashboard
 > interactif, indicateurs de confort, système d'alertes et mise en cache locale.
 
-**Projet EPSI — 3ᵉ année du cycle Ingénieur (FISE / FISA)** — réalisé en trinôme.
+**Projet EPSI — 3ᵉ année du cycle Ingénieur (FISE / FISA)** — réalisé en quadrinôme.
 
 ---
 
