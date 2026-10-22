@@ -9,6 +9,9 @@ import numpy as np
 
 CACHE_DB = "data/data_cache.db"
 CACHE_TTL_MINUTES = 30
+# Endpoint public RainViewer : renvoie les métadonnées des tuiles radar (frames passées
+# et de prévision) sous forme de JSON. Aucune clé d'API n'est requise.
+RAINVIEWER_MAPS_URL = "https://api.rainviewer.com/public/weather-maps.json"
 
 
 class WeatherAPIClient:
@@ -147,3 +150,29 @@ class WeatherAPIClient:
                 }
             }
         }
+
+
+def fetch_rainviewer_radar(timeout: int = 5) -> Optional[Dict[str, Any]]:
+    """
+    Récupère les métadonnées du radar de précipitations RainViewer (passé + prévision).
+
+    Sert de source au calque radar de l'onglet « Précipitations » du dashboard.
+    En cas d'échec (réseau coupé, service indisponible, JSON invalide), on renvoie
+    `None` plutôt que de lever une exception : l'application Streamlit reste
+    utilisable et affiche simplement un message d'indisponibilité.
+
+    Args:
+        timeout: Délai maximal d'attente de la requête, en secondes.
+
+    Returns:
+        Le payload JSON brut de RainViewer, ou `None` si la requête échoue.
+    """
+    try:
+        logging.info("Requesting RainViewer radar metadata...")
+        response = requests.get(RAINVIEWER_MAPS_URL, timeout=timeout)
+        response.raise_for_status()
+        return response.json()
+    except (requests.exceptions.RequestException, ValueError) as e:
+        # RequestException : erreurs réseau / HTTP ; ValueError : JSON illisible.
+        logging.error(f"RainViewer request failed: {e}")
+        return None

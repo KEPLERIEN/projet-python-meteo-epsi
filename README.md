@@ -59,6 +59,7 @@ le traitement métier et la couche d'affichage sont strictement séparés.
 | Interface | Dashboard **Streamlit** avec cartes KPI | Oui |
 | Interface | Graphiques temporels interactifs (**Plotly**) | Oui |
 | Interface | Carte géographique interactive (Plotly Mapbox) | Oui |
+| Interface | Carte des précipitations — radar RainViewer animé (Plotly) | Oui |
 
 ### Bonus
 
@@ -171,10 +172,11 @@ Le panneau principal affiche :
 
 1. **Zone d'alertes** — bannière rouge (danger) ou orange (vigilance) en cas de dépassement de seuil.
 2. **Cartes KPI** — Température, Humidité, Indice AQI (US), PM 2.5, Score de confort (0–100).
-3. **Trois onglets** :
+3. **Quatre onglets** :
    - *Évolution Météo* — série temporelle température / humidité ;
    - *Qualité de l'Air* — concentrations des polluants sur les 24 dernières heures ;
-   - *Carte Interactive* — localisation de la station de mesure.
+   - *Carte Interactive* — localisation de la station de mesure ;
+   - *Précipitations* — radar RainViewer animé en calque Plotly (2 h passées + prévision courte échéance), avec Lecture/Pause et curseur d'échéance.
 
 ---
 
@@ -212,6 +214,7 @@ python -m unittest discover -s tests -p "test_*.py" -v
 | --- | --- | --- |
 | [Open-Meteo](https://open-meteo.com/) | Météo (température, humidité, pression, vent) | Aucune |
 | [Open-Meteo Air Quality](https://open-meteo.com/en/docs/air-quality-api) | Qualité de l'air (PM2.5, PM10, NO2, O3, CO, SO2, AQI) | Aucune |
+| [RainViewer](https://www.rainviewer.com/api.html) | Radar de précipitations (frames passées + nowcast) | Aucune |
 
 ---
 
