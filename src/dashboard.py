@@ -110,7 +110,7 @@ RAINVIEWER_TILE_OPTIONS = "1_1" # Options de rendu (lissage, neige)
 RAINVIEWER_TILE_SIZE = 256 # Taille tuile
 RAINVIEWER_OPACITY = 0.7 # Opacité
 RAINVIEWER_ZOOM = 6 # Zoom initial
-RAINVIEWER_FRAME_MS = 600 # Durée frame (ms)
+RAINVIEWER_FRAME_MS = 1000 # Durée frame (ms)
 RAINVIEWER_TRANSITION_MS = 250 # Transition (ms)
 
 def build_radar_tile_url(host: str, frame_path: str) -> str:
@@ -130,16 +130,16 @@ def build_radar_layer(source: str) -> Dict[str, Any]:
     }
 
 def build_radar_map(city: str, lat: float, lon: float, host: str, frames: List[Dict[str, str]], height: int = 700) -> go.Figure:
-    #Carte Plotly animée avec calques radar RainViewer.
+    # Carte Plotly animée avec calques radar RainViewer.
     labels = [frame["label"] for frame in frames]
     frame_names = [f"radar-{index}" for index in range(len(frames))]
     tile_urls = [build_radar_tile_url(host, frame["path"]) for frame in frames]
-
+    # Ajout de la station sur la carte
     station = pd.DataFrame([{"lat": lat, "lon": lon, "ville": city}])
     figure = px.scatter_mapbox(station, lat="lat", lon="lon", hover_name="ville", zoom=RAINVIEWER_ZOOM, height=height)
     figure.update_traces(marker=dict(size=14, color="#d81b60"))
     figure.update_layout(
-        mapbox_style="open-street-map",
+        mapbox_style="streets",
         mapbox_layers=[build_radar_layer(tile_urls[-1])], # Frame initiale (la plus récente)
         margin=dict(l=0, r=0, t=10, b=0),
         updatemenus=[{
@@ -368,7 +368,7 @@ def render_dashboard():
             map_df, lat="lat", lon="lon", hover_name="city", hover_data=["aqi"],
             color_discrete_sequence=["fuchsia"], zoom=9, height=800
         )
-        fig_map.update_layout(mapbox_style="open-street-map")
+        fig_map.update_layout(mapbox_style="streets")
         st.plotly_chart(fig_map, use_container_width=True)
 
     # Tab4: Précipitations
