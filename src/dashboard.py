@@ -115,11 +115,11 @@ def build_csv_export(data: pd.DataFrame) -> bytes:
 # Palette de couleurs des tuiles radar RainViewer.
 # 0 = N&B, 1 = Original, 2 = Universal Blue, 3 = TITAN, 4 = The Weather Channel,
 # 5 = Meteored, 6 = NEXRAD, 7 = Rainbow SELEX-IS, 8 = Dark Sky.
-RAINVIEWER_TILE_COLOR = 4  # The Weather Channel : bon contraste sur le fond OpenStreetMap
+RAINVIEWER_TILE_COLOR = 6  # The Weather Channel : bon contraste sur le fond OpenStreetMap
 # Options de rendu des tuiles (format "smooth_snow") :
 #   smooth : lissage des échos radar (0 = brut, 1 = lissé)
 #   snow   : affichage des précipitations neigeuses (0 = non, 1 = oui)
-RAINVIEWER_TILE_OPTIONS = "0_0"
+RAINVIEWER_TILE_OPTIONS = "1_1"
 
 # Taille des tuiles (en pixels), opacité du calque radar et zoom initial de la carte.
 RAINVIEWER_TILE_SIZE = 256
@@ -441,16 +441,25 @@ def render_dashboard():
     ])
 
     with tab1:
-        st.subheader("Température et Humidité (7 derniers jours / Prévisions)")
+        st.subheader("Évolution des conditions météo")
         fig_temp = px.line(
-            df, x="datetime", y=["temperature_2m", "relativehumidity_2m"],
-            labels={"value": "Valeur", "datetime": "Date/Heure", "variable": "Métrique"},
-            title="Série temporelle Météo"
+            df, x="datetime", 
+            y=["temperature_2m", "relativehumidity_2m", "windspeed_10m", "surface_pressure"],
+            labels={
+                "temperature_2m": "Température (°C)",
+                "relativehumidity_2m": "Humidité (%)",
+                "windspeed_10m": "Vent (km/h)",
+                "surface_pressure": "Pression (hPa)",
+                "datetime": "Date/Heure",
+                "value": "Valeur",
+                "variable": "Métrique"
+            },
+            title="Série temporelle Météo complète"
         )
         st.plotly_chart(fig_temp, use_container_width=True)
 
     with tab2:
-        st.subheader("Concentration des Polluants Clés (µg/m³)")
+        st.subheader("Analyse complète de la Qualité de l'Air")
         last_24_hours = DataProcessor.filter_last_24_hours(df)
         if last_24_hours.empty:
             st.info("Aucune donnée mesurée disponible pour les 24 dernières heures.")
@@ -458,9 +467,21 @@ def render_dashboard():
             fig_air = px.bar(
                 last_24_hours,
                 x="datetime",
-                y=["pm2_5", "pm10", "nitrogen_dioxide"],
+                y=["us_aqi", "pm2_5", "pm10", "nitrogen_dioxide", "ozone", "sulphur_dioxide", "carbon_monoxide"],
+                labels={
+                    "us_aqi": "AQI (US)",
+                    "pm2_5": "PM2.5",
+                    "pm10": "PM10",
+                    "nitrogen_dioxide": "NO2",
+                    "ozone": "O3",
+                    "sulphur_dioxide": "SO2",
+                    "carbon_monoxide": "CO",
+                    "datetime": "Date/Heure",
+                    "value": "Concentration / Indice",
+                    "variable": "Polluant"
+                },
                 barmode="group",
-                title="Exposition aux polluants sur les 24 dernières heures",
+                title="Toutes les données de pollution (24h)",
             )
             st.plotly_chart(fig_air, use_container_width=True)
 
