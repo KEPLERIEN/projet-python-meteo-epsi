@@ -11,7 +11,7 @@ THRESHOLDS = {
 }
 
 def detect_alerts(df: pd.DataFrame) -> List[Dict[str, str]]:
-    """Analyse les données récentes pour détecter les dépassements de seuils."""
+    #Analyse les données récentes pour détecter les dépassements de seuils.
     alerts = []
     if df.empty:
         return alerts

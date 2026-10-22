@@ -146,15 +146,15 @@ class WeatherAPIClient:
             }
         }
 
-    # Récupération des métadonnées radar RainViewer
-    def fetch_rainviewer_radar(timeout: int = 5) -> Optional[Dict[str, Any]]:
-        #Récupère les métadonnées radar RainViewer (frames passé + nowcast).
-        try:
-            logging.info("Récupération métadonnées RainViewer...")
-            response = requests.get(RAINVIEWER_MAPS_URL, timeout=timeout)
-            response.raise_for_status()
-            return response.json()
-        # Gestion des erreurs
-        except (requests.exceptions.RequestException, ValueError) as e:
-            logging.error(f"Échec RainViewer : {e}")
-            return None
+# Récupération des métadonnées radar RainViewer
+def fetch_rainviewer_radar(timeout: int = 5) -> Optional[Dict[str, Any]]:
+    #Récupère les métadonnées radar RainViewer (frames passé + nowcast).
+    try:
+        logging.info("Récupération métadonnées RainViewer...")
+        response = requests.get(RAINVIEWER_MAPS_URL, timeout=timeout)
+        response.raise_for_status()
+        return response.json()
+    # Gestion des erreurs
+    except (requests.exceptions.RequestException, ValueError) as e:
+        logging.error(f"Échec RainViewer : {e}")
+        return None

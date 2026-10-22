@@ -19,7 +19,6 @@ try:
     from .data_processing import DataProcessor
     from .alerts import detect_alerts
 except ImportError:
-    # Execution directe : streamlit run src/dashboard.py
     from api_client import WeatherAPIClient, fetch_rainviewer_radar
     from data_processing import DataProcessor
     from alerts import detect_alerts
