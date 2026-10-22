@@ -273,11 +273,9 @@ def render_dashboard():
     # Cartes KPI
     st.markdown("---")
     col1, col2, col3, col4, col5 = st.columns(5)
-
     col1.metric("Température", f"{latest['temperature_2m']:.1f} °C")
     col2.metric("Humidité", f"{latest['relativehumidity_2m']:.0f} %")
-    aqi_display = f"{latest_aqi:.0f}" if latest_aqi is not None else "Indisponible"
-    col3.metric("Indice AQI (US)", aqi_display)
+    col3.metric("Indice AQI (US)", latest_aqi)
     col4.metric("PM 2.5", f"{latest['pm2_5']:.1f} µg/m³")
     col5.metric("Score Confort (0-100)", f"{latest['health_score']:.1f}")
 

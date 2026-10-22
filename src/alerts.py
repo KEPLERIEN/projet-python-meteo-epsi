@@ -16,7 +16,7 @@ THRESHOLDS = {
     "temp_max": {"warning": 33.0, "danger": 38.0, "unit": "°C"}              # pas de seuil OMS, valeurs conservées
 }
 
-# (clé dans THRESHOLDS, colonne du DataFrame, libellé affiché)
+# Clé dans THRESHOLDS, colonne du DataFrame, libellé affiché
 POLLUTANTS = [
     ("pm2_5", "pm2_5", "PM2.5"),
     ("pm10", "pm10", "PM10"),
@@ -27,7 +27,7 @@ POLLUTANTS = [
     ("us_aqi", "us_aqi", "Indice US AQI"),
 ]
 
-
+# Formater les valeurs de pollution
 def _format_value(value: float, unit: str) -> str:
     return f"{value:.1f} {unit}".strip()
 

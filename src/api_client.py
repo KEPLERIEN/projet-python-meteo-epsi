@@ -115,7 +115,6 @@ class WeatherAPIClient:
         hours = 24 * 7
         now = datetime.datetime.now()
         times = [(now - datetime.timedelta(hours=i)).isoformat() for i in range(hours)][::-1]
-
         return {
             "weather": {
                 "current_weather": {
