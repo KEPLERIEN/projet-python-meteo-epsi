@@ -324,6 +324,7 @@ def render_dashboard():
             },
             title="Série temporelle Météo complète"
         )
+        fig_temp.update_traces(visible="legendonly", selector={"name": "surface_pressure"})
         st.plotly_chart(fig_temp, use_container_width=True)
     
     # Tab2: Qualité de l'Air
