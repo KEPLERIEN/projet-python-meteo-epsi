@@ -5,14 +5,11 @@ import numpy as np
 
 
 class DataProcessor:
-    """
-    Data Transformation and Calculations.
-    Author: Student B (Data Analyst)
-    """
+    """Transformation et calculs sur les données."""
 
     @staticmethod
     def process_raw_api_data(raw_data: Dict[str, Any]) -> pd.DataFrame:
-        """Transforms raw API responses into a clean Pandas DataFrame."""
+        """Transforme les réponses API brutes en DataFrame Pandas propre."""
         w_hourly = raw_data.get("weather", {}).get("hourly", {})
         a_hourly = raw_data.get("air_quality", {}).get("hourly", {})
 
@@ -29,15 +26,12 @@ class DataProcessor:
 
     @staticmethod
     def calculate_custom_health_index(df: pd.DataFrame) -> pd.Series:
-        """
-        Calculates a custom composite Comfort/Health Score (0-100 scale).
-        Higher is better.
-        """
+        """Calcule un score de confort/santé (0-100)."""
         temp = df["temperature_2m"]
         humidity = df["relativehumidity_2m"]
         pm2_5 = df["pm2_5"]
 
-        # Penalty factors based on optimal comfort conditions
+        # Facteurs de pénalité basés sur le confort optimal
         temp_penalty = np.abs(temp - 21.0) * 1.5
         humidity_penalty = np.abs(humidity - 50.0) * 0.3
         pollution_penalty = pm2_5 * 1.2
@@ -46,11 +40,8 @@ class DataProcessor:
         return score.clip(0, 100).round(1)
 
     @staticmethod
-    def filter_last_24_hours(
-        df: pd.DataFrame,
-        now: Optional[pd.Timestamp] = None,
-    ) -> pd.DataFrame:
-        """Return only rows from the previous 24 hours, excluding forecast data."""
+    def filter_last_24_hours(df: pd.DataFrame, now: Optional[pd.Timestamp] = None) -> pd.DataFrame:
+        """Retourne les mesures des 24 dernières heures (hors prévisions)."""
         if df.empty:
             return df.copy()
 
@@ -61,11 +52,8 @@ class DataProcessor:
         return df.loc[mask].copy()
 
     @staticmethod
-    def select_current_observation(
-        df: pd.DataFrame,
-        observation_time: Optional[str],
-    ) -> pd.DataFrame:
-        """Select the latest hourly row at or before the API's current time."""
+    def select_current_observation(df: pd.DataFrame, observation_time: Optional[str]) -> pd.DataFrame:
+        """Sélectionne la ligne la plus proche de l'heure actuelle."""
         if df.empty:
             return df.copy()
 
