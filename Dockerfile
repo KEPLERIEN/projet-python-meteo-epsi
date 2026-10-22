@@ -1,9 +1,5 @@
 FROM python:3.12-slim
 
-# Évite les fichiers .pyc et permet de voir les logs immédiatement
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-ENV PYTHONPATH=/app
 
 WORKDIR /app
 
